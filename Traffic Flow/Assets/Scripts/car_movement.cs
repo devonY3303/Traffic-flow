@@ -1,71 +1,28 @@
-/*using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class car_movement : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-            transform.Translate(0, 1.1f, 0);
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
-            transform.Translate(0, -1.1f, 0);
-        else if (Input.GetKeyDown(KeyCode.LeftArrow))
-            transform.Translate(-1.1f, 0, 0);
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
-            transform.Translate(1.1f, 0, 0);
-    }
-}*/
-
-/*using UnityEngine;
-
-public class CarMovement : MonoBehaviour
-{
-    public float movementSpeed = 5f;  // Speed of the car's movement
-
-    void OnCollisionEnter(Collision collision)
-    {
-        // Check if the object is a grid and move in the corresponding direction
-        if (collision.gameObject.CompareTag("Grid"))
-        {
-            // Get the GridDirection component from the collided grid object
-            GridDirection gridDirection = collision.gameObject.GetComponent<GridDirection>();
-
-            // Check which direction the grid is set to
-            if (gridDirection != null)
-            {
-                MoveInDirection(gridDirection.direction);
-            }
-        }
-    }
-
-    void MoveInDirection(Vector3 direction)
-    {
-        // Move the car in the specified direction
-        transform.Translate(direction * movementSpeed * Time.deltaTime);
-    }
-}*/
-
 using UnityEngine;
 
 public class CarMovement : MonoBehaviour
 {
     public float moveDistance = 1.1f; // Distance to move in grid units
-    public float moveSpeed = 5f;    // Speed of the car movement
+    public float moveSpeed = 5f;      // Speed of the car movement
 
     private Vector3 targetPosition;
     private bool isMoving = false;
 
+    public Score_Management scoreManager; // Reference to the ScoreManager
+
     void Start()
     {
         targetPosition = transform.position;
+
+        // Ensure ScoreManager is assigned if not set in the Inspector
+        if (scoreManager == null)
+        {
+            scoreManager = FindObjectOfType<Score_Management>();
+            if (scoreManager == null)
+            {
+                Debug.LogError("ScoreManager not found in the scene. Please add a ScoreManager to the scene.");
+            }
+        }
     }
 
     void Update()
@@ -84,9 +41,15 @@ public class CarMovement : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         GridDirection grid = collision.GetComponent<GridDirection>();
+
         if (grid != null && !isMoving)
         {
             MoveInDirection(grid.gridDirection);
+        }
+
+        if (ShouldIncreaseScore(grid))
+        {
+            UpdateScore();
         }
     }
 
@@ -109,5 +72,17 @@ public class CarMovement : MonoBehaviour
         }
         isMoving = true;
     }
-}
 
+    private void UpdateScore()
+    {
+        if (scoreManager != null)
+        {
+            scoreManager.AddPoint(); // Update the score in the ScoreManager
+        }
+    }
+
+    private bool ShouldIncreaseScore(GridDirection grid)
+    {
+        return grid.gameObject.CompareTag("Destination");
+    }
+}
