@@ -11,40 +11,8 @@ public class CarMovement : MonoBehaviour
     public Score_Management scoreManager; // Reference to the ScoreManager
     public GameObject destinationPrefab;  // Prefab of the Destination tile
 
-    // Define the valid positions for the grid map
-    private Vector3[] validPositions = new Vector3[]
-    {
-        new Vector3(-2.2f, 1.1f, 0f),
-        new Vector3(-1.1f, 1.1f, 0f),
-        new Vector3(0f, 1.1f, 0f),
-        new Vector3(1.1f, 1.1f, 0f),
-        new Vector3(2.2f, 1.1f, 0f),
-
-        new Vector3(-2.2f, 0f, 0f),
-        new Vector3(-1.1f, 0f, 0f),
-        new Vector3(0f, 0f, 0f),
-        new Vector3(1.1f, 0f, 0f),
-        new Vector3(2.2f, 0f, 0f),
-
-        // Added 3 extra rows
-        new Vector3(-2.2f, -1.1f, 0f),
-        new Vector3(-1.1f, -1.1f, 0f),
-        new Vector3(0f, -1.1f, 0f),
-        new Vector3(1.1f, -1.1f, 0f),
-        new Vector3(2.2f, -1.1f, 0f),
-
-        new Vector3(-2.2f, -2.2f, 0f),
-        new Vector3(-1.1f, -2.2f, 0f),
-        new Vector3(0f, -2.2f, 0f),
-        new Vector3(1.1f, -2.2f, 0f),
-        new Vector3(2.2f, -2.2f, 0f),
-
-        new Vector3(-2.2f, -3.3f, 0f),
-        new Vector3(-1.1f, -3.3f, 0f),
-        new Vector3(0f, -3.3f, 0f),
-        new Vector3(1.1f, -3.3f, 0f),
-        new Vector3(2.2f, -3.3f, 0f),
-    };
+    private GameObject currentDestination; // Reference to the current destination tile
+    private GridPlacer gridPlacer;
 
     // Define the edge positions for the destination tile
     private Vector3[] edgePositions = new Vector3[]
@@ -81,8 +49,8 @@ public class CarMovement : MonoBehaviour
     void Start()
     {
         // Randomly select a starting position from the grid
-        int randomIndex = Random.Range(0, validPositions.Length);
-        transform.position = validPositions[randomIndex];
+        int randomIndex = Random.Range(0, GridData.validPositions.Length);
+        transform.position = GridData.validPositions[randomIndex];
 
         targetPosition = transform.position;
 
@@ -98,6 +66,8 @@ public class CarMovement : MonoBehaviour
                 Debug.LogError("ScoreManager not found in the scene. Please add a ScoreManager to the scene.");
             }
         }
+
+        gridPlacer = FindObjectOfType<GridPlacer>();
     }
 
     void Update()
@@ -106,18 +76,44 @@ public class CarMovement : MonoBehaviour
         {
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
 
-            if (transform.position == targetPosition)
+            if (Vector3.Distance(transform.position, targetPosition) < 0.001f)
             {
                 isMoving = false;
+
+                // Check if the car has reached the destination
+                if (transform.position == currentDestination.transform.position)
+                {
+                    gridPlacer.ClearPlacedTiles(); // Clear the placed tiles
+
+                    // Move the car to a random position on the grid
+                    MoveToRandomPosition();
+
+                    // Spawn a new destination tile on the edge
+                    SpawnRandomDestination();
+                }
             }
         }
     }
 
+    void MoveToRandomPosition()
+    {
+        int randomIndex = Random.Range(0, GridData.validPositions.Length);
+        transform.position = GridData.validPositions[randomIndex];
+        targetPosition = transform.position;
+    }
+
     private void SpawnRandomDestination()
     {
+        // Destroy the current destination if it exists
+        if (currentDestination != null)
+        {
+            Destroy(currentDestination);
+        }
+
         int randomIndex = Random.Range(0, edgePositions.Length);
         Vector3 spawnPosition = edgePositions[randomIndex];
-        Instantiate(destinationPrefab, spawnPosition, Quaternion.identity);
+
+        currentDestination = Instantiate(destinationPrefab, spawnPosition, Quaternion.identity);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -132,6 +128,23 @@ public class CarMovement : MonoBehaviour
         if (ShouldIncreaseScore(grid))
         {
             UpdateScore();
+
+            // Move the car to a random position from validPositions
+            int randomIndex = Random.Range(0, GridData.validPositions.Length);
+            transform.position = GridData.validPositions[randomIndex];
+            targetPosition = transform.position;
+
+            // Destroy the old destination
+            Destroy(currentDestination);
+
+            // Spawn a new destination
+            SpawnRandomDestination();
+
+            // Clear all placed tiles
+            if (gridPlacer != null)
+            {
+                gridPlacer.ClearPlacedTiles();
+            }
         }
     }
 
