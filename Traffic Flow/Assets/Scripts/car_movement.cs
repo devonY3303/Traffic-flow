@@ -10,6 +10,7 @@ public class CarMovement : MonoBehaviour
 
     public Score_Management scoreManager; // Reference to the ScoreManager
     public GameObject destinationPrefab;  // Prefab of the Destination tile
+    public ObstacleManager obstacleManager; // Reference to the ObstacleManager
 
     private GameObject currentDestination; // Reference to the current destination tile
     private GridPlacer gridPlacer;
@@ -49,7 +50,7 @@ public class CarMovement : MonoBehaviour
     void Start()
     {
         // Randomly select a starting position from the grid
-        int randomIndex = Random.Range(0, GridData.validPositions.Length);
+        int randomIndex = Random.Range(0, GridData.validPositions.Count);
         transform.position = GridData.validPositions[randomIndex];
 
         targetPosition = transform.position;
@@ -57,7 +58,7 @@ public class CarMovement : MonoBehaviour
         // Randomly spawn a destination tile on the edge of the grid
         SpawnRandomDestination();
 
-        // Ensure ScoreManager is assigned if not set in the Inspector
+        // Ensure ScoreManager and ObstacleManager are assigned if not set in the Inspector
         if (scoreManager == null)
         {
             scoreManager = FindObjectOfType<Score_Management>();
@@ -67,7 +68,22 @@ public class CarMovement : MonoBehaviour
             }
         }
 
+        if (obstacleManager == null)
+        {
+            obstacleManager = FindObjectOfType<ObstacleManager>();
+            if (obstacleManager == null)
+            {
+                Debug.LogError("ObstacleManager not found in the scene. Please add an ObstacleManager to the scene.");
+            }
+        }
+
         gridPlacer = FindObjectOfType<GridPlacer>();
+
+        // Spawn initial obstacles
+        if (obstacleManager != null)
+        {
+            obstacleManager.SpawnRandomObstacles(3);
+        }
     }
 
     void Update()
@@ -79,25 +95,13 @@ public class CarMovement : MonoBehaviour
             if (Vector3.Distance(transform.position, targetPosition) < 0.001f)
             {
                 isMoving = false;
-
-                // Check if the car has reached the destination
-                if (transform.position == currentDestination.transform.position)
-                {
-                    gridPlacer.ClearPlacedTiles(); // Clear the placed tiles
-
-                    // Move the car to a random position on the grid
-                    MoveToRandomPosition();
-
-                    // Spawn a new destination tile on the edge
-                    SpawnRandomDestination();
-                }
             }
         }
     }
 
     void MoveToRandomPosition()
     {
-        int randomIndex = Random.Range(0, GridData.validPositions.Length);
+        int randomIndex = Random.Range(0, GridData.validPositions.Count);
         transform.position = GridData.validPositions[randomIndex];
         targetPosition = transform.position;
     }
@@ -130,9 +134,24 @@ public class CarMovement : MonoBehaviour
             UpdateScore();
 
             // Move the car to a random position from validPositions
-            int randomIndex = Random.Range(0, GridData.validPositions.Length);
+            int randomIndex = Random.Range(0, GridData.validPositions.Count);
             transform.position = GridData.validPositions[randomIndex];
             targetPosition = transform.position;
+
+            if (obstacleManager == null)
+            {
+                obstacleManager = FindObjectOfType<ObstacleManager>();
+                if (obstacleManager == null)
+                {
+                    Debug.LogError("ObstacleManager not found in the scene. Please add an ObstacleManager to the scene.");
+                }
+            }
+
+            if (obstacleManager != null)
+            {
+                obstacleManager.ClearObstacles();
+                obstacleManager.SpawnRandomObstacles(5);
+            }
 
             // Destroy the old destination
             Destroy(currentDestination);

@@ -26,4 +26,10 @@ public class Score_Management : MonoBehaviour
     {
         scoreText.text = "Score: " + score.ToString();
     }
+
+    // Method to get the current score
+    public int getScore()
+    {
+        return score;
+    }
 }

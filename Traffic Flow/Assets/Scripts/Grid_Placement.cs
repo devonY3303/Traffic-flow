@@ -11,18 +11,16 @@ public class GridPlacer : MonoBehaviour
 
     private GameObject gridToPlace;
     private List<GameObject> placedTiles = new List<GameObject>();
-
-    public float snapThreshold = 0.5f; // How close the click needs to be to a valid position
+    public float snapThreshold = 0.5f;
 
     void Start()
     {
-        // Get the buttons from the UI
+        // Set up button listeners
         Button upButton = GameObject.Find("UpButton").GetComponent<Button>();
         Button downButton = GameObject.Find("DownButton").GetComponent<Button>();
         Button leftButton = GameObject.Find("LeftButton").GetComponent<Button>();
         Button rightButton = GameObject.Find("RightButton").GetComponent<Button>();
 
-        // Assign button click listeners
         upButton.onClick.AddListener(() => SelectGridToPlace(upGridPrefab));
         downButton.onClick.AddListener(() => SelectGridToPlace(downGridPrefab));
         leftButton.onClick.AddListener(() => SelectGridToPlace(leftGridPrefab));
@@ -52,7 +50,7 @@ public class GridPlacer : MonoBehaviour
         if (Vector3.Distance(mousePosition, nearestPosition) <= snapThreshold)
         {
             GameObject placedTile = Instantiate(gridToPlace, nearestPosition, Quaternion.identity);
-            placedTiles.Add(placedTile); // Add the placed tile to the list
+            placedTiles.Add(placedTile);
             gridToPlace = null;
         }
         else

@@ -7,6 +7,8 @@ TagManager:
   - Car
   - Grid
   - Destination
+  - Obstacle
+  - ObstacleManager
   layers:
   - Default
   - TransparentFX
