@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 76cecb234c06014468d3c045a17d0060
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - upGridPrefab: {fileID: 2126888513927053661, guid: 0878a915722222946b33df4baa6f791d, type: 3}
+  - downGridPrefab: {fileID: 6487626668959085796, guid: ae4299e6889cf0841aad8158adb14b84, type: 3}
+  - leftGridPrefab: {fileID: 7303118969812320153, guid: ee528a12babbf9e4fb518506ef50f5d3, type: 3}
+  - rightGridPrefab: {fileID: 1655913710530442975, guid: 1a5f04cf0e158e94f854e676770e9dd2, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
