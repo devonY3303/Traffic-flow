@@ -47,6 +47,8 @@ public class CarMovement : MonoBehaviour
         new Vector3(2.2f, 2.2f, 0f),
     };
 
+    private GameOverManager gameOverManager;
+
     void Start()
     {
         // Randomly select a starting position from the grid
@@ -79,6 +81,9 @@ public class CarMovement : MonoBehaviour
 
         gridPlacer = FindObjectOfType<GridPlacer>();
 
+        // Get reference to GameOverManager
+        gameOverManager = FindObjectOfType<GameOverManager>();
+
         // Spawn initial obstacles
         if (obstacleManager != null)
         {
@@ -95,6 +100,16 @@ public class CarMovement : MonoBehaviour
             if (Vector3.Distance(transform.position, targetPosition) < 0.001f)
             {
                 isMoving = false;
+
+                // Check if the car is out of bounds
+                if (!IsPositionWithinGrid(targetPosition))
+                {
+                    // Trigger Game Over
+                    if (gameOverManager != null)
+                    {
+                        gameOverManager.GameOver();
+                    }
+                }
             }
         }
     }
@@ -129,14 +144,22 @@ public class CarMovement : MonoBehaviour
             MoveInDirection(grid.gridDirection);
         }
 
-        if (ShouldIncreaseScore(grid))
+        if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            // Trigger Game Over
+            if (gameOverManager != null)
+            {
+                gameOverManager.GameOver();
+            }
+        }
+        else if (ShouldIncreaseScore(grid))
         {
             UpdateScore();
 
             // Move the car to a random position from validPositions
             int randomIndex = Random.Range(0, GridData.validPositions.Count);
             transform.position = GridData.validPositions[randomIndex];
-            targetPosition = transform.position;
+            targetPosition = GridData.validPositions[randomIndex];
 
             if (obstacleManager == null)
             {
@@ -167,7 +190,7 @@ public class CarMovement : MonoBehaviour
         }
     }
 
-    private void MoveInDirection(GridDirection.Direction direction)
+    public void MoveInDirection(GridDirection.Direction direction)
     {
         switch (direction)
         {
@@ -197,6 +220,11 @@ public class CarMovement : MonoBehaviour
 
     private bool ShouldIncreaseScore(GridDirection grid)
     {
-        return grid.gameObject.CompareTag("Destination");
+        return grid != null && grid.gameObject.CompareTag("Destination");
+    }
+
+    private bool IsPositionWithinGrid(Vector3 position)
+    {
+        return GridData.validPositions.Contains(position);
     }
 }

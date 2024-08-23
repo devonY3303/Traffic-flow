@@ -12,50 +12,55 @@ public class GridPlacer : MonoBehaviour
     private GameObject gridToPlace;
     private List<GameObject> placedTiles = new List<GameObject>();
     public float snapThreshold = 0.5f;
+    private CarMovement carMovement;
 
     void Start()
     {
+        // Find the CarMovement script
+        carMovement = FindObjectOfType<CarMovement>();
+        if (carMovement == null)
+        {
+            Debug.LogError("CarMovement script not found in the scene. Please add a Car with the CarMovement script.");
+        }
+
         // Set up button listeners
         Button upButton = GameObject.Find("UpButton").GetComponent<Button>();
         Button downButton = GameObject.Find("DownButton").GetComponent<Button>();
         Button leftButton = GameObject.Find("LeftButton").GetComponent<Button>();
         Button rightButton = GameObject.Find("RightButton").GetComponent<Button>();
 
-        upButton.onClick.AddListener(() => SelectGridToPlace(upGridPrefab));
-        downButton.onClick.AddListener(() => SelectGridToPlace(downGridPrefab));
-        leftButton.onClick.AddListener(() => SelectGridToPlace(leftGridPrefab));
-        rightButton.onClick.AddListener(() => SelectGridToPlace(rightGridPrefab));
+        upButton.onClick.AddListener(() => OnDirectionButtonPressed(GridDirection.Direction.Up, upGridPrefab));
+        downButton.onClick.AddListener(() => OnDirectionButtonPressed(GridDirection.Direction.Down, downGridPrefab));
+        leftButton.onClick.AddListener(() => OnDirectionButtonPressed(GridDirection.Direction.Left, leftGridPrefab));
+        rightButton.onClick.AddListener(() => OnDirectionButtonPressed(GridDirection.Direction.Right, rightGridPrefab));
     }
 
-    void Update()
+    void OnDirectionButtonPressed(GridDirection.Direction direction, GameObject gridPrefab)
     {
-        if (Input.GetMouseButtonDown(0) && gridToPlace != null)
+        if (carMovement != null)
         {
-            TryPlaceGrid();
+            Vector3 carPosition = carMovement.transform.position;
+
+            // Place the grid underneath the car
+            TryPlaceGrid(gridPrefab, carPosition);
+
+            // Move the car in the specified direction
+            carMovement.MoveInDirection(direction);
         }
     }
 
-    void SelectGridToPlace(GameObject gridPrefab)
+    void TryPlaceGrid(GameObject gridPrefab, Vector3 position)
     {
-        gridToPlace = gridPrefab;
-    }
+        Vector3 nearestPosition = GetNearestValidPosition(position);
 
-    void TryPlaceGrid()
-    {
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePosition.z = 0;
-
-        Vector3 nearestPosition = GetNearestValidPosition(mousePosition);
-
-        if (Vector3.Distance(mousePosition, nearestPosition) <= snapThreshold)
+        if (Vector3.Distance(position, nearestPosition) <= snapThreshold)
         {
-            GameObject placedTile = Instantiate(gridToPlace, nearestPosition, Quaternion.identity);
+            GameObject placedTile = Instantiate(gridPrefab, nearestPosition, Quaternion.identity);
             placedTiles.Add(placedTile);
-            gridToPlace = null;
         }
         else
         {
-            Debug.Log("Not close enough to a valid position!");
+            Debug.Log("Car is not close enough to a valid position!");
         }
     }
 

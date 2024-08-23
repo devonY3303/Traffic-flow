@@ -9,6 +9,7 @@ TagManager:
   - Destination
   - Obstacle
   - ObstacleManager
+  - Monster
   layers:
   - Default
   - TransparentFX
