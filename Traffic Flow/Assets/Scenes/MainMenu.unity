@@ -307,6 +307,14 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3601958092676739696, guid: 6453634a5ef92a145b25d72b46c2c4ed, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 319.74
+      objectReference: {fileID: 0}
+    - target: {fileID: 3601958092676739696, guid: 6453634a5ef92a145b25d72b46c2c4ed, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 135.33
+      objectReference: {fileID: 0}
     - target: {fileID: 4920152589593941404, guid: 6453634a5ef92a145b25d72b46c2c4ed, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -387,13 +395,48 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4951184972646171245, guid: 6453634a5ef92a145b25d72b46c2c4ed, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 652.2886
+      objectReference: {fileID: 0}
+    - target: {fileID: 4951184972646171245, guid: 6453634a5ef92a145b25d72b46c2c4ed, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 178.1288
+      objectReference: {fileID: 0}
+    - target: {fileID: 4951184972646171245, guid: 6453634a5ef92a145b25d72b46c2c4ed, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.9743
+      objectReference: {fileID: 0}
+    - target: {fileID: 4951184972646171245, guid: 6453634a5ef92a145b25d72b46c2c4ed, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 56.4832
+      objectReference: {fileID: 0}
+    - target: {fileID: 6228712075211396289, guid: 6453634a5ef92a145b25d72b46c2c4ed, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -206.453
+      objectReference: {fileID: 0}
     - target: {fileID: 6228712075211396289, guid: 6453634a5ef92a145b25d72b46c2c4ed, type: 3}
       propertyPath: m_SizeDelta.y
       value: -28.6262
       objectReference: {fileID: 0}
     - target: {fileID: 6228712075211396289, guid: 6453634a5ef92a145b25d72b46c2c4ed, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -5.3985
+      objectReference: {fileID: 0}
+    - target: {fileID: 6228712075211396289, guid: 6453634a5ef92a145b25d72b46c2c4ed, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0.40100098
+      objectReference: {fileID: 0}
+    - target: {fileID: 6472631203530413620, guid: 6453634a5ef92a145b25d72b46c2c4ed, type: 3}
+      propertyPath: m_text
+      value: "Control:\nYou are controlling a boat by clicking direction button.\n\nGoal:\nKeep
+        moving the boat to destination grid in time, OR game over!\n\nMusic Contribution:\nFlowing
+        Energy by Keys of Moon | https://soundcloud.com/keysofmoon\r\nMusic promoted
+        by https://www.chosic.com/free-music/all/\r\nCreative Commons CC BY 4.0\r\nhttps://creativecommons.org/licenses/by/4.0/\r"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6472631203530413620, guid: 6453634a5ef92a145b25d72b46c2c4ed, type: 3}
+      propertyPath: m_margin.w
+      value: -115.73155
       objectReference: {fileID: 0}
     - target: {fileID: 7460605778033266407, guid: 6453634a5ef92a145b25d72b46c2c4ed, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
