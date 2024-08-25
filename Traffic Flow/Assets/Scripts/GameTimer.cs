@@ -15,13 +15,11 @@ public class GameTimer : MonoBehaviour
 
     public GameOverManager gameOverManager; // Reference to the GameOverManager
 
-    // Start is called before the first frame update
     void Start()
     {
         ResetTimer();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (stopTimer)
@@ -66,5 +64,11 @@ public class GameTimer : MonoBehaviour
         timerSlider.maxValue = gameTime;
         timerSlider.value = remainingTime;
         stopTimer = false;
+    }
+
+    // Method to check if the timer has run out
+    public bool IsTimeUp()
+    {
+        return stopTimer;
     }
 }

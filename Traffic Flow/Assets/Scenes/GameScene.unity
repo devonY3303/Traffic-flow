@@ -721,7 +721,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameOverPanel: {fileID: 1600932888}
   obstacleManager: {fileID: 866284601}
-  gameTimer: {fileID: 0}
+  gameTimer: {fileID: 992183470}
   scoreManager: {fileID: 904438877}
   scoreText: {fileID: 1707945546}
   monsterPrefab: {fileID: 343501327}
@@ -3472,10 +3472,10 @@ PrefabInstance:
       addedObject: {fileID: 2116002754}
     - targetCorrespondingSourceObject: {fileID: 6987384647751143955, guid: 98eae59f9937cb6458702561141658e7, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1821997840}
+      addedObject: {fileID: 1600932889}
     - targetCorrespondingSourceObject: {fileID: 6987384647751143955, guid: 98eae59f9937cb6458702561141658e7, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1600932889}
+      addedObject: {fileID: 1821997840}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 98eae59f9937cb6458702561141658e7, type: 3}
 --- !u!1001 &4008741307490055429

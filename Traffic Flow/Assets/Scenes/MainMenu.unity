@@ -514,10 +514,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6472631203530413620, guid: 6453634a5ef92a145b25d72b46c2c4ed, type: 3}
       propertyPath: m_text
-      value: "Control:\nYou are controlling a boat by clicking direction button.\n\nGoal:\nKeep
-        moving the boat to destination grid in time, OR game over!\n\nMusic Contribution:\nFlowing
-        Energy by Keys of Moon | https://soundcloud.com/keysofmoon\r\nMusic promoted
-        by https://www.chosic.com/free-music/all/\r\nCreative Commons CC BY 4.0\r\nhttps://creativecommons.org/licenses/by/4.0/\r"
+      value: "Control:\nYou can steer the boat by clicking the direction buttons
+        around the compass.\n\nGoal:\nKeep moving the boat to destination grid in
+        time, while avoiding the deadly dea monster and dead zones OR game over!\n\nMusic
+        Contribution:\nFlowing Energy by Keys of Moon | https://soundcloud.com/keysofmoon\r\nMusic
+        promoted by https://www.chosic.com/free-music/all/\r\nCreative Commons CC
+        BY 4.0\r\nhttps://creativecommons.org/licenses/by/4.0/\r"
       objectReference: {fileID: 0}
     - target: {fileID: 6472631203530413620, guid: 6453634a5ef92a145b25d72b46c2c4ed, type: 3}
       propertyPath: m_margin.w
