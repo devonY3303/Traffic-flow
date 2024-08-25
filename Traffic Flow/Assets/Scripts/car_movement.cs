@@ -164,6 +164,11 @@ public class CarMovement : MonoBehaviour
         {
             UpdateScore();
 
+            if (gameTimer != null)
+            {
+                gameTimer.AddTime(5f); // Add 5 seconds, adjust this value as needed
+            }
+
             // Move the car to a random position from validPositions
             int randomIndex = Random.Range(0, GridData.validPositions.Count);
             transform.position = GridData.validPositions[randomIndex];

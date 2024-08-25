@@ -36,13 +36,7 @@ public class GameTimer : MonoBehaviour
             TimerEnded();
         }
 
-        int minutes = Mathf.FloorToInt(remainingTime / 60);
-        int seconds = Mathf.FloorToInt(remainingTime % 60);
-
-        string textTime = string.Format("{0:00}:{1:00}", minutes, seconds);
-
-        timerText.text = textTime;
-        timerSlider.value = remainingTime;
+        UpdateTimerUI();
     }
 
     private void TimerEnded()
@@ -70,5 +64,28 @@ public class GameTimer : MonoBehaviour
     public bool IsTimeUp()
     {
         return stopTimer;
+    }
+
+    // Method to add time to the timer
+    public void AddTime(float timeToAdd)
+    {
+        remainingTime += timeToAdd;
+        if (remainingTime > timerSlider.maxValue)
+        {
+            remainingTime = timerSlider.maxValue; // Prevents the time from exceeding the initial game time
+        }
+        UpdateTimerUI();
+    }
+
+    // Method to update the timer UI
+    private void UpdateTimerUI()
+    {
+        int minutes = Mathf.FloorToInt(remainingTime / 60);
+        int seconds = Mathf.FloorToInt(remainingTime % 60);
+
+        string textTime = string.Format("{0:00}:{1:00}", minutes, seconds);
+
+        timerText.text = textTime;
+        timerSlider.value = remainingTime;
     }
 }
