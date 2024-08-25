@@ -17,7 +17,7 @@ public class Score_Management : MonoBehaviour
     // Method to increment the score
     public void AddPoint()
     {
-        score++;
+        score+=5;
         UpdateScoreText();
     }
 

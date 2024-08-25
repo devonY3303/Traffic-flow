@@ -11,9 +11,11 @@ public class CarMovement : MonoBehaviour
     public Score_Management scoreManager; // Reference to the ScoreManager
     public GameObject destinationPrefab;  // Prefab of the Destination tile
     public ObstacleManager obstacleManager; // Reference to the ObstacleManager
+    public GameTimer gameTimer; // Reference to the GameTimer
 
     private GameObject currentDestination; // Reference to the current destination tile
     private GridPlacer gridPlacer;
+    private GameOverManager gameOverManager;
 
     // Define the edge positions for the destination tile
     private Vector3[] edgePositions = new Vector3[]
@@ -47,8 +49,6 @@ public class CarMovement : MonoBehaviour
         new Vector3(2.2f, 2.2f, 0f),
     };
 
-    private GameOverManager gameOverManager;
-
     void Start()
     {
         // Randomly select a starting position from the grid
@@ -60,7 +60,7 @@ public class CarMovement : MonoBehaviour
         // Randomly spawn a destination tile on the edge of the grid
         SpawnRandomDestination();
 
-        // Ensure ScoreManager and ObstacleManager are assigned if not set in the Inspector
+        // Ensure ScoreManager, ObstacleManager, GameTimer, and GameOverManager are assigned if not set in the Inspector
         if (scoreManager == null)
         {
             scoreManager = FindObjectOfType<Score_Management>();
@@ -79,6 +79,15 @@ public class CarMovement : MonoBehaviour
             }
         }
 
+        if (gameTimer == null)
+        {
+            gameTimer = FindObjectOfType<GameTimer>();
+            if (gameTimer == null)
+            {
+                Debug.LogError("GameTimer not found in the scene. Please add a GameTimer to the scene.");
+            }
+        }
+
         gridPlacer = FindObjectOfType<GridPlacer>();
 
         // Get reference to GameOverManager
@@ -87,7 +96,7 @@ public class CarMovement : MonoBehaviour
         // Spawn initial obstacles
         if (obstacleManager != null)
         {
-            obstacleManager.SpawnRandomObstacles(3);
+            obstacleManager.SpawnRandomObstacles(3, transform.position, currentDestination.transform.position);
         }
     }
 
@@ -104,13 +113,15 @@ public class CarMovement : MonoBehaviour
                 // Check if the car is out of bounds
                 if (!IsPositionWithinGrid(targetPosition))
                 {
-                    // Trigger Game Over
-                    if (gameOverManager != null)
-                    {
-                        gameOverManager.GameOver();
-                    }
+                    TriggerGameOver();
                 }
             }
+        }
+
+        // Check if the timer has run out
+        if (gameTimer != null && gameTimer.IsTimeUp())
+        {
+            TriggerGameOver();
         }
     }
 
@@ -144,13 +155,10 @@ public class CarMovement : MonoBehaviour
             MoveInDirection(grid.gridDirection);
         }
 
-        if (collision.gameObject.CompareTag("Obstacle"))
+        if (collision.gameObject.CompareTag("Obstacle") || collision.gameObject.CompareTag("Monster"))
         {
             // Trigger Game Over
-            if (gameOverManager != null)
-            {
-                gameOverManager.GameOver();
-            }
+            TriggerGameOver();
         }
         else if (ShouldIncreaseScore(grid))
         {
@@ -173,7 +181,7 @@ public class CarMovement : MonoBehaviour
             if (obstacleManager != null)
             {
                 obstacleManager.ClearObstacles();
-                obstacleManager.SpawnRandomObstacles(5);
+                obstacleManager.SpawnRandomObstacles(5, transform.position, currentDestination.transform.position);
             }
 
             // Destroy the old destination
@@ -226,5 +234,13 @@ public class CarMovement : MonoBehaviour
     private bool IsPositionWithinGrid(Vector3 position)
     {
         return GridData.validPositions.Contains(position);
+    }
+
+    private void TriggerGameOver()
+    {
+        if (gameOverManager != null)
+        {
+            gameOverManager.GameOver();
+        }
     }
 }

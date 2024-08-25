@@ -50,7 +50,7 @@ public class GameOverManager : MonoBehaviour
             Debug.LogError("ScoreText not assigned. Please assign a TextMeshPro object to display the score.");
         }
 
-        SpawnMonsters();
+        SpawnMonsters(); // Call the method to spawn monsters at the start of the game
     }
 
     public void GameOver()
@@ -66,7 +66,6 @@ public class GameOverManager : MonoBehaviour
 
     public void RestartGame()
     {
-
         Time.timeScale = 1f; // Resume time
 
         if (obstacleManager != null)
@@ -76,7 +75,6 @@ public class GameOverManager : MonoBehaviour
 
         GridData.ResetGridData(); // Reset the grid data
 
-        
         if (gameTimer != null)
         {
             gameTimer.ResetTimer();
