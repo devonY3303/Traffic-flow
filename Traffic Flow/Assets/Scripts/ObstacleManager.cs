@@ -10,21 +10,47 @@ public class ObstacleManager : MonoBehaviour
     {
         ClearObstacles();
         Debug.Log("Spawning obstacles");
+
+        List<Vector3> centerTiles = new List<Vector3>
+        {
+            new Vector3(-1.1f, 0f, 0f),
+            new Vector3(0f, 0f, 0f),
+            new Vector3(1.1f, 0f, 0f),
+            new Vector3(-1.1f, -1.1f, 0f),
+            new Vector3(0f, -1.1f, 0f),
+            new Vector3(1.1f, -1.1f, 0f),
+            new Vector3(-1.1f, -2.2f, 0f),
+            new Vector3(0f, -2.2f, 0f),
+            new Vector3(1.1f, -2.2f, 0f)
+        };
+
+        List<Vector3> forbiddenPositions = new List<Vector3>
+        {
+            carPosition,
+            destinationPosition,
+            new Vector3(carPosition.x + 1.1f, carPosition.y, carPosition.z),
+            new Vector3(carPosition.x - 1.1f, carPosition.y, carPosition.z),
+            new Vector3(carPosition.x, carPosition.y + 1.1f, carPosition.z),
+            new Vector3(carPosition.x, carPosition.y - 1.1f, carPosition.z),
+            new Vector3(destinationPosition.x + 1.1f, destinationPosition.y, destinationPosition.z),
+            new Vector3(destinationPosition.x - 1.1f, destinationPosition.y, destinationPosition.z),
+            new Vector3(destinationPosition.x, destinationPosition.y + 1.1f, destinationPosition.z),
+            new Vector3(destinationPosition.x, destinationPosition.y - 1.1f, destinationPosition.z)
+        };
+
         for (int i = 0; i < count; i++)
         {
-            if (GridData.validPositions.Count > 0)
+            if (centerTiles.Count > 0)
             {
-                Vector3 obstaclePosition = Vector3.zero; // Initialize obstaclePosition
-                int attempts = 0;
+                Vector3 obstaclePosition = Vector3.zero;
                 bool validPositionFound = false;
 
-                while (attempts < 200)
+                for (int attempts = 0; attempts < 200; attempts++)
                 {
-                    int randomIndex = Random.Range(0, GridData.validPositions.Count);
-                    obstaclePosition = GridData.validPositions[randomIndex];
-                    attempts++;
+                    int randomIndex = Random.Range(0, centerTiles.Count);
+                    obstaclePosition = centerTiles[randomIndex];
 
-                    if (obstaclePosition != carPosition && // Ensure obstacle is not at the car's position
+                    if (!forbiddenPositions.Contains(obstaclePosition) &&
                         !IsAdjacent(obstaclePosition, carPosition) &&
                         !IsAdjacent(obstaclePosition, destinationPosition))
                     {
@@ -44,7 +70,8 @@ public class ObstacleManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning("No valid position found for obstacle after 100 attempts.");
+                    Debug.LogWarning("No valid position found for obstacle after 200 attempts.");
+                    break;
                 }
             }
         }
@@ -58,10 +85,18 @@ public class ObstacleManager : MonoBehaviour
 
     public void ClearObstacles()
     {
+        // Destroy all active obstacles in the scene
         foreach (var obstacle in activeObstacles)
         {
             Destroy(obstacle);
         }
+
+        // Clear the list of active obstacles
         activeObstacles.Clear();
+
+        // Reset the grid data (valid positions and obstacle positions)
+        GridData.ResetGridData();
+
+        Debug.Log("Obstacles cleared and grid data reset.");
     }
 }

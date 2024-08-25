@@ -181,7 +181,7 @@ public class CarMovement : MonoBehaviour
             if (obstacleManager != null)
             {
                 obstacleManager.ClearObstacles();
-                obstacleManager.SpawnRandomObstacles(5, transform.position, currentDestination.transform.position);
+                obstacleManager.SpawnRandomObstacles(3, transform.position, currentDestination.transform.position);
             }
 
             // Destroy the old destination
