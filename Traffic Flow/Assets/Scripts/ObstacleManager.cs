@@ -8,6 +8,7 @@ public class ObstacleManager : MonoBehaviour
 
     public void SpawnRandomObstacles(int count, Vector3 carPosition, Vector3 destinationPosition)
     {
+        ClearObstacles();
         Debug.Log("Spawning obstacles");
         for (int i = 0; i < count; i++)
         {

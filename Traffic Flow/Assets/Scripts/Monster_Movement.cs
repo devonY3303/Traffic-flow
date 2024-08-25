@@ -54,28 +54,28 @@ public class Monster_Movement : MonoBehaviour
                 Vector3[] availableDirections = new Vector3[directions.Length];
                 directions.CopyTo(availableDirections, 0);
 
-                Debug.Log("Available directions: " + string.Join(", ", availableDirections)); // Print available directions
+                //Debug.Log("Available directions: " + string.Join(", ", availableDirections)); // Print available directions
 
                 while (availableDirections.Length > 0 && !foundValidMove)
                 {
                     Vector3 newDirection = GetRandomDirection(availableDirections);
                     Vector3 newPosition = SnapToGrid(transform.position + newDirection * moveDistance);
 
-                    Debug.Log("Trying new position: " + newPosition); // Print the new position
+                    //Debug.Log("Trying new position: " + newPosition); // Print the new position
 
                     if (IsValidPosition(newPosition))
                     {
-                        Debug.Log("Valid position found: " + newPosition); // Print if valid
+                        //Debug.Log("Valid position found: " + newPosition); // Print if valid
                         targetPosition = newPosition;
                         isMoving = true;
                         foundValidMove = true;
                     }
                     else
                     {
-                        Debug.Log("Invalid position, removing direction: " + newDirection); // Print if invalid
+                        //Debug.Log("Invalid position, removing direction: " + newDirection); // Print if invalid
                         // Remove the invalid direction and try again
                         availableDirections = RemoveDirection(availableDirections, newDirection);
-                        Debug.Log("Remaining directions: " + string.Join(", ", availableDirections)); // Print remaining directions
+                        //Debug.Log("Remaining directions: " + string.Join(", ", availableDirections)); // Print remaining directions
                     }
                 }
 

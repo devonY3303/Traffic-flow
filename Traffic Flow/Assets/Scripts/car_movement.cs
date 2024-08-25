@@ -233,6 +233,9 @@ public class CarMovement : MonoBehaviour
 
     private bool IsPositionWithinGrid(Vector3 position)
     {
+        position = new Vector3(Mathf.Round(position.x * 10) / 10, Mathf.Round(position.y * 10) / 10, position.z);
+        bool isValid = GridData.validPositions.Contains(position);
+        Debug.Log($"Checking position {position}: Is valid? {isValid}");
         return GridData.validPositions.Contains(position);
     }
 
